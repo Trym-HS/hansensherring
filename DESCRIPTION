@@ -1,0 +1,25 @@
+Package: hansensherring
+Type: Package
+Title: Displaying 0-group herring data over a map of the northern Barent's Sea
+Version: 0.1.0
+Authors@R: c(
+    person(
+      "Trym", "Hansen Skarshaug",
+      email = "trska2186@uib.no",
+      role = c("aut", "cre")
+    )
+  )
+Description: Displays trawl station as points on a map.
+  Each station displays individuals caught, histograms showing weight (g) 
+    and length (mm) and strata location.
+License: MIT-license
+Encoding: UTF-8
+LazyData: true
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Imports: 
+    dplyr,
+    ggplot2,
+    roxygen2,
+    usethis

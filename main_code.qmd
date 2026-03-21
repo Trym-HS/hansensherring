@@ -1,0 +1,67 @@
+---
+title: "main_code"
+format: html
+editor: visual
+---
+
+```{r}
+#Packages used
+
+library(dplyr)
+library(ggplot2)
+library(roxygen2)
+library(usethis)
+library(readxl)
+library(leaflet)
+library(janitor)
+
+```
+
+```{r}
+
+# Reading the target .xlsx-file
+herring_data <- read_excel("herring_data.xlsx")
+
+# Choosing unique stations
+stations <- herring_data %>%
+  distinct(station_nr, lat, lon)
+
+# Creating and plotting leaflet-map
+leaflet(data = stations) %>%
+  addTiles() %>%  # Base map
+  addCircleMarkers(
+    lng = ~lon,
+    lat = ~lat,
+    radius = 5,
+    popup = ~paste("Station:", station_nr),
+    color = "blue",
+    fillOpacity = 0.8
+  )
+
+
+```
+
+```{r}
+
+# Read the Excel file
+herring_data <- read_excel("herring_data.xlsx")%>%
+  clean_names()
+
+# Ensure relevant columns exist and remove missing values
+plot_data <- herring_data %>%
+  select(station_nr, ind_nr, len_mm) %>%
+  filter(!is.na(len_mm))
+
+# Create histogram with facet wrap by station
+ggplot(plot_data, aes(x = len_mm)) +
+  geom_histogram(binwidth = 10, fill = "steelblue", color = "black") +
+  facet_wrap(~ station_nr) +
+  labs(
+    title = "Length Distribution of Herring by Station",
+    x = "Length (mm)",
+    y = "Frequency"
+  ) +
+  theme_minimal()
+
+```
+
