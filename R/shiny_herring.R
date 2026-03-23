@@ -1,20 +1,51 @@
 
-library(shiny)
-library(leaflet)
-library(dplyr)
-library(ggplot2)
-library(readxl)
-library(usethis)
+#' Launches the "hansensherring" shiny app
+#'
+#' This function launches the Hansen's Herring shiny app.
+#' This app displays a Leaflet-map over the western part of Svalbard Archipelago,
+#' with 20 generated trawl stations where herring *C.harengus* is found.
+#' catch total, mean weigth and mean length is displayed while hovering over
+#' stations, while clicking them displays histograms showing weight and length.
+#'
+#' @return
+#' A shiny app object
+#'
+
+#' @importFrom shiny fluidPage titlePanel fluidRow column renderPlot reactive reactiveVal observeEvent req plotOutput shinyApp h4
+#' @importFrom leaflet leaflet addTiles setView addCircleMarkers renderLeaflet leafletOutput
+#' @importFrom dplyr rename filter group_by summarise n
+#' @importFrom magrittr %>%
+#' @importFrom ggplot2 ggplot aes geom_histogram labs
+#' @importFrom readxl read_excel
+
+#library(shiny)
+#library(leaflet)
+#library(dplyr)
+#library(ggplot2)
+#library(readxl)
 
 # ---------------------------
 # DATA FUNCTIONS
 # ---------------------------
 
-read_herring_data <- function(path) {
-  read_excel(path)
-}
-# Cleaning data for all columns in herring_data.xlsx
+#' @title Read Herring
+#' @description Reads in excel dataset
+#' @param path Takes in the path of dataset
+#' @return A read dataset
+#' @export
 
+
+read_herring_data <- function(path) {
+  readxl::read_excel(path)
+}
+
+# Cleaning data for all columns in herring_data.xlsx
+#' @title Cleans herring data
+#' @description cleans already read dataset
+#' @param df Takes in the a dataset
+#' @return A cleaned dataset
+#' @export
+#'
 clean_herring_data <- function(df) {
   df %>%
     rename(
@@ -28,11 +59,16 @@ clean_herring_data <- function(df) {
     filter(!is.na(station), !is.na(length), !is.na(weight))
 }
 # Sorting and further cleaning data for individual fish per station
+#' @title Summarizes stations
+#' @description groups and calculate mean of fish measurements
+#' @param df Takes in the path
+#' @return mean measurements and fish amounts grouped by station and location
+#' @export
 
 summarize_stations <- function(df) {
   df %>%
-    group_by(station, lat, lon) %>%
-    summarise(
+    dplyr::group_by(station, lat, lon) %>%
+    dplyr::summarise(
       n_fish = n(),
       mean_length = mean(length, na.rm = TRUE),
       mean_weight = mean(weight, na.rm = TRUE),
@@ -46,6 +82,15 @@ summarize_stations <- function(df) {
 
 # Plotting both histograms for herring measurements
 
+
+# Plotting histogram for length of fish per station
+#' @title plots length histogram
+#' @description plots the aesthetics and the displayed bins for the plot
+#' @param df dataframe with excel data
+#' @param station_id For station number in original file
+#' @return plot for length histogram
+#' @export
+#'
 plot_length_hist <- function(df, station_id) {
   df %>%
     filter(station == station_id) %>%
@@ -58,6 +103,15 @@ plot_length_hist <- function(df, station_id) {
     )
 }
 
+# Plotting histogram for weight of fish per station
+
+#' @title plots weigth histogram
+#' @description plots the aesthetics and the displayed bins for the plot
+#' @param df dataframe with excel data
+#' @param station_id # For station number in original file
+#' @return plot for weight histogram
+#' @export
+#'
 plot_weight_hist <- function(df, station_id) {
   df %>%
     filter(station == station_id) %>%
@@ -82,7 +136,7 @@ ui <- fluidPage(
   fluidRow(
     column(
       width = 6,
-      leafletOutput("map", height = 600)
+      leaflet::leafletOutput("map", height = 600)
     ),
     column(
       width = 6,
@@ -97,12 +151,20 @@ ui <- fluidPage(
 # SERVER
 # ---------------------------
 
+# Running app
+#' @title launches the server and the app visuals
+#' @description launches the shiny server and the accompanying visuals
+#' @param input data from earlier functions
+#' @param output final output for shiny app
+#' @param session for displaying shiny app in seperate window
+#' @return shiny application
+#' @export
+#'
 server <- function(input, output, session) {
 
   # Loading data from original Excel-file
-
   df <- reactive({
-    read_herring_data("herring_data.xlsx") %>%
+    read_herring_data("data/herring_data.xlsx") %>%
       clean_herring_data()
   })
 
@@ -112,11 +174,11 @@ server <- function(input, output, session) {
 
   # Selected station as an interactive object
 
-  selected_station <- reactiveVal(NULL)
+  selected_station <- shiny::reactiveVal(NULL)
 
   # Establishing Leaflet mapping with location markers
 
-  output$map <- renderLeaflet({
+  output$map <- leaflet::renderLeaflet({
     leaflet(summary_df()) %>%
       addTiles() %>%
       setView(lng = 15, lat = 77.5, zoom = 5) %>%
@@ -154,7 +216,10 @@ server <- function(input, output, session) {
   })
 }
 
-# Running app
 
-shinyApp(ui, server)
+
+  shinyApp(ui, server)
+
+# This app was made largely with troubleshooting help from ChatGPT 5.3, as well as guides from Biostat and lectures by Richard Telford (2026)
+# Further advice and help from fellow students Pia Alina Brakstad Smith and Thorsten Schilling
 
