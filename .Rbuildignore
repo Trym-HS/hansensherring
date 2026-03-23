@@ -3,3 +3,4 @@
 #Put usethis and/or devtools functions here
 ^LICENSE\.md$
 ^data-raw$
+^README\.Rmd$
