@@ -9,8 +9,8 @@ Authors@R: c(
       role = c("aut", "cre")
     )
   )
-Description: Displays trawl station as points on a map.
-  Each station displays individuals caught, mean weight, mean length, 
+Description: Displays trawl station as points on a map. 
+  Each station displays individuals caught, mean weight, mean length,  
     histograms showing weight (g) and length (mm).
 License: MIT-license
 Encoding: UTF-8
@@ -22,9 +22,13 @@ Imports:
     dplyr,
     ggplot2,
     leaflet,
+    magrittr,
     readxl,
     roxygen2,
     shiny,
     usethis
 URL: https://github.com/Trym-HS/hansensherring
 BugReports: https://github.com/Trym-HS/hansensherring/issues
+RoxygenNote: 7.3.3
+Depends: 
+    R (>= 3.5)
