@@ -1,0 +1,39 @@
+
+## Hansen’s Herring
+
+This app displays generated herring data over a map over the Barents
+Sea. There are 20 clickable stations that each display histograms of
+weight (g) and length of 0-group herring caught per station. This
+package was made to help visualize for friends, family and supervisors
+the area and data I am collecting for my thesis on lipids and energetics
+in 0-group herring in the Barents Sea.
+
+## Installation
+
+You can install the development version of hansensherring from
+[GitHub](https://github.com/) with:
+
+``` r
+# install.packages("pak")
+pak::pak("Trym-HS/hansensherring")
+```
+
+## Running the app
+
+To run the app, type the following into your console
+
+``` r
+hansensherring::run_herring_app()
+```
+
+<div style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div>
+
+Hover over the blue circlemarkers to display the mean weight, lenght and
+total catch of 0-group herring per station.
+
+Click the blue circlemarkers to display the histograms of weight and
+length of 0-group herring per station.
+
+# This package was made largely with troubleshooting help from ChatGPT 5.3, as well as guides from Biostat and lectures by Richard Telford (2026)
+
+# Further advice and help from fellow students Pia Alina Brakstad Smith and Thorsten Schilling
