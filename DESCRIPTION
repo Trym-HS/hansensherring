@@ -11,7 +11,8 @@ Authors@R: c(
   )
 Description: Displays trawl station as points on a map. 
   Each station displays individuals caught, mean weight, mean length,  
-    histograms showing weight (g) and length (mm).
+    histograms showing weight (g) and length (mm). New, revised version
+      made after assignment due.
 License: MIT-license
 Encoding: UTF-8
 LazyData: true
@@ -22,7 +23,6 @@ Imports:
     dplyr,
     ggplot2,
     leaflet,
-    magrittr,
     readxl,
     roxygen2,
     shiny,
